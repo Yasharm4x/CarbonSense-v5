@@ -1,7 +1,7 @@
-import { LLMEmissionsCalculator } from "@/components/LLMEmissionsCalculator";
+import { MLEmissionsCalculator } from "@/components/MLEmissionsCalculator";
 
 const Index = () => {
-  return <LLMEmissionsCalculator />;
+  return <MLEmissionsCalculator />;
 };
 
 export default Index;
