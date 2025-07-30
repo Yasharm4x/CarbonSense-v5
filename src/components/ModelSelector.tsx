@@ -1,4 +1,10 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { MODEL_CATEGORIES } from "@/data/models";
 import { Brain, Cpu, Zap, Sparkles } from "lucide-react";
@@ -19,21 +25,28 @@ interface ModelSelectorProps {
 
 const getCategoryIcon = (category: string) => {
   switch (category) {
-    case "llm": return <Brain className="h-4 w-4" />;
-    case "generative": return <Sparkles className="h-4 w-4" />;
-    case "ml": return <Cpu className="h-4 w-4" />;
-    case "quantized": return <Zap className="h-4 w-4" />;
-    default: return <Brain className="h-4 w-4" />;
+    case "llm":
+      return <Brain className="h-4 w-4" />;
+    case "generative":
+      return <Sparkles className="h-4 w-4" />;
+    case "ml":
+      return <Cpu className="h-4 w-4" />;
+    case "quantized":
+      return <Zap className="h-4 w-4" />;
+    default:
+      return <Brain className="h-4 w-4" />;
   }
 };
 
-export const ModelSelector = ({ 
-  selectedCategory, 
-  selectedModel, 
-  onCategoryChange, 
-  onModelChange 
+export const ModelSelector = ({
+  selectedCategory,
+  selectedModel,
+  onCategoryChange,
+  onModelChange,
 }: ModelSelectorProps) => {
-  const currentModels = selectedCategory ? MODEL_CATEGORIES[selectedCategory as keyof typeof MODEL_CATEGORIES]?.models : {};
+  const currentModels = selectedCategory
+    ? MODEL_CATEGORIES[selectedCategory as keyof typeof MODEL_CATEGORIES]?.models
+    : {};
 
   return (
     <div className="space-y-4">
@@ -43,14 +56,17 @@ export const ModelSelector = ({
           <Brain className="h-4 w-4" />
           Model Category
         </label>
-        <Select value={selectedCategory} onValueChange={(value) => {
-          onCategoryChange(value);
-          onModelChange(""); // Reset model selection when category changes
-        }}>
+        <Select
+          value={selectedCategory}
+          onValueChange={(value) => {
+            onCategoryChange(value);
+            onModelChange(""); // Reset model selection when category changes
+          }}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Select model category..." />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent side="bottom">
             {Object.entries(MODEL_CATEGORIES).map(([key, category]) => (
               <SelectItem key={key} value={key}>
                 <div className="flex items-center gap-2">
@@ -71,7 +87,7 @@ export const ModelSelector = ({
             <SelectTrigger>
               <SelectValue placeholder="Select a model..." />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent side="bottom">
               {Object.entries(currentModels).map(([key, model]) => {
                 const modelData = model as ModelData;
                 return (
@@ -80,7 +96,9 @@ export const ModelSelector = ({
                       <span>{modelData.name}</span>
                       <div className="flex gap-1 ml-2">
                         <Badge variant="secondary" className="text-xs">
-                          {modelData.params >= 1 ? `${modelData.params}B` : `${(modelData.params * 1000).toFixed(0)}M`}
+                          {modelData.params >= 1
+                            ? `${modelData.params}B`
+                            : `${(modelData.params * 1000).toFixed(0)}M`}
                         </Badge>
                         <Badge variant="outline" className="text-xs">
                           {modelData.company}
