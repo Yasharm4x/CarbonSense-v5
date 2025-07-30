@@ -46,18 +46,18 @@ export const MODEL_CATEGORIES = {
 export const DATASET_TYPES = {
   structured: { 
     name: "Structured Data", 
-    description: "Tables, CSV, databases",
+    description: "Tables, CSV, databases", 
     energyMultiplier: 1.0 
   },
   unstructured: { 
     name: "Unstructured Data", 
-    description: "Text, images, audio, video",
-    energyMultiplier: 1.5 
+    description: "Text, images, audio, video", 
+    energyMultiplier: 2.5 
   },
   combined: { 
     name: "Combined Data", 
-    description: "Mix of structured and unstructured",
-    energyMultiplier: 1.3 
+    description: "Mix of structured and unstructured", 
+    energyMultiplier: 1.6 
   }
 };
 
