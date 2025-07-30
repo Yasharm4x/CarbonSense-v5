@@ -24,7 +24,7 @@ export const MLEmissionsCalculator = () => {
   const [columns, setColumns] = useState<number>(10);
   
   // Token configuration (for LLMs)
-  const [tokens, setTokens] = useState<number[]>([1000]);
+  const [tokens, setTokens] = useState<number>(1000);
   
   const { toast } = useToast();
 
@@ -36,7 +36,7 @@ export const MLEmissionsCalculator = () => {
     selectedRegion,
     rows,
     columns,
-    tokens: tokens[0]
+    tokens: tokens
   });
 
   const contextualResult = getContextualEquivalence(co2Result);
@@ -53,7 +53,7 @@ export const MLEmissionsCalculator = () => {
     const result = `ML Model Emissions: ${co2Result.toFixed(2)}g CO₂
 Model: ${modelData?.name}
 Category: ${categoryData?.name}
-${isLLM ? `Tokens: ${tokens[0].toLocaleString()}` : `Dataset: ${rows.toLocaleString()} × ${columns} (${(rows * columns).toLocaleString()} data points)`}
+${isLLM ? `Tokens: ${tokens.toLocaleString()}` : `Dataset: ${rows.toLocaleString()} × ${columns} (${(rows * columns).toLocaleString()} data points)`}
 ${selectedTask ? `Task: ${selectedTask}` : ''}
 ${selectedDatasetType ? `Data Type: ${selectedDatasetType}` : ''}
 Region: ${region?.name}
@@ -125,20 +125,21 @@ Calculated using: lovable.dev/ml-emissions-calculator`;
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <label className="text-sm font-medium">Output Tokens</label>
-                      <Badge variant="outline">{tokens[0].toLocaleString()}</Badge>
+                      <Badge variant="outline">{tokens.toLocaleString()}</Badge>
                     </div>
                     <Slider
-                      value={tokens}
-                      onValueChange={setTokens}
-                      max={10000}
-                      min={10}
+                      value={[tokens]}
+                      onValueChange={(val) => setTokens(val[0])}
+                      max={100000}
+                      min={0}
                       step={10}
                       className="w-full"
                     />
                     <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>10</span>
-                      <span>5,000</span>
-                      <span>10,000</span>
+                      <span>0</span>
+                      <span>25,000</span>
+                      <span>50,000</span>
+                      <span>1,00,000</span>
                     </div>
                   </div>
                 ) : (
@@ -224,7 +225,7 @@ Calculated using: lovable.dev/ml-emissions-calculator`;
                         {isLLMCategory ? (
                           <div className="flex justify-between">
                             <span>Tokens:</span>
-                            <span className="font-medium">{tokens[0].toLocaleString()}</span>
+                            <span className="font-medium">{tokens.toLocaleString()}</span>
                           </div>
                         ) : (
                           <>

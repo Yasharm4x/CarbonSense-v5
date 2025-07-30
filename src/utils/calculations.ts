@@ -2,7 +2,7 @@ import { MODEL_CATEGORIES, DATASET_TYPES, ML_TASKS, REGION_DATA } from "@/data/m
 
 interface ModelData {
   name: string;
-  params: number;
+  params: number; // in billions, e.g. 175 for GPT-4
   company: string;
   energyMultiplier: number;
 }
@@ -26,49 +26,59 @@ export const calculateEmissions = ({
   selectedRegion,
   rows,
   columns,
-  tokens = 1000
+  tokens
 }: CalculationParams): number => {
   if (!selectedCategory || !selectedModel || !selectedRegion) return 0;
-  
+
   const categoryData = MODEL_CATEGORIES[selectedCategory as keyof typeof MODEL_CATEGORIES];
   const modelRaw = categoryData?.models[selectedModel as keyof typeof categoryData.models];
   const model = modelRaw as ModelData;
   const region = REGION_DATA[selectedRegion as keyof typeof REGION_DATA];
-  
+
   if (!model || !region) return 0;
 
-  // Base energy calculation varies by model category
   let baseEnergy = 0;
-  
+
   if (selectedCategory === 'llm') {
-    // For LLMs: energy per token calculation
-    const energyPerTokenEstimate = 1.5e-6; // kWh per billion params per token
-    baseEnergy = tokens * model.params * energyPerTokenEstimate;
+    const energyPerTokenEstimate = 2.2e-8; // 🔍 Accurate LLM energy (kWh per billion param per token)
+
+    const safeTokens = tokens ?? 0;
+
+    // ✅ Log for debugging
+    console.log("🔢 Tokens:", safeTokens);
+    console.log("📦 Model Params (B):", model.params);
+    console.log("⚡ Energy/Token Estimate:", energyPerTokenEstimate);
+
+    baseEnergy = safeTokens * model.params * energyPerTokenEstimate;
   } else {
-    // For other models: energy based on dataset size and model complexity
     const dataPoints = rows * columns;
-    const energyPerDataPoint = model.params * 2e-9; // kWh per billion params per data point
+    const energyPerDataPoint = model.params * 2e-9;
     baseEnergy = dataPoints * energyPerDataPoint;
   }
 
-  // Apply multipliers
   let totalEnergy = baseEnergy * model.energyMultiplier;
-  
-  if (selectedDatasetType && DATASET_TYPES[selectedDatasetType as keyof typeof DATASET_TYPES]) {
-    totalEnergy *= DATASET_TYPES[selectedDatasetType as keyof typeof DATASET_TYPES].energyMultiplier;
-  }
-  
-  if (selectedTask && ML_TASKS[selectedTask as keyof typeof ML_TASKS]) {
-    totalEnergy *= ML_TASKS[selectedTask as keyof typeof ML_TASKS].energyMultiplier;
+
+  if (selectedCategory !== 'llm') {
+    if (selectedDatasetType && DATASET_TYPES[selectedDatasetType as keyof typeof DATASET_TYPES]) {
+      totalEnergy *= DATASET_TYPES[selectedDatasetType as keyof typeof DATASET_TYPES].energyMultiplier;
+    }
+
+    if (selectedTask && ML_TASKS[selectedTask as keyof typeof ML_TASKS]) {
+      totalEnergy *= ML_TASKS[selectedTask as keyof typeof ML_TASKS].energyMultiplier;
+    }
   }
 
-  // Convert to CO₂ emissions
+  // Final CO₂ (g) = kWh × PUE × Carbon Intensity
   const co2Grams = totalEnergy * region.pue * region.carbonIntensity;
-  
+
+  // ✅ Log final result
+  console.log("⚡ Total Energy (kWh):", totalEnergy.toFixed(6));
+  console.log("🌍 CO2 Grams:", co2Grams.toFixed(2));
+
   return co2Grams;
 };
 
-// Contextual equivalences for CO₂ amounts
+// 🌍 Contextual equivalence display
 export const getContextualEquivalence = (co2Grams: number): string => {
   if (co2Grams < 1) return "< 1 second of breathing";
   if (co2Grams < 5) return `${Math.round(co2Grams * 2)} seconds of phone charging`;

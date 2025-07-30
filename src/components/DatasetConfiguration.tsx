@@ -40,14 +40,16 @@ export const DatasetConfiguration = ({
           <SelectContent>
             {Object.entries(DATASET_TYPES).map(([key, type]) => (
               <SelectItem key={key} value={key}>
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between w-full">
-                    <span>{type.name}</span>
-                    <Badge variant="secondary" className="ml-2 text-xs">
+                <div className="space-y-1 w-full">
+                  <div className="flex items-center justify-between flex-wrap gap-1 w-full">
+                    <span className="truncate">{type.name}</span>
+                    <Badge variant="secondary" className="shrink-0 text-xs px-2 py-0.5">
                       {type.energyMultiplier}x
                     </Badge>
                   </div>
-                  <div className="text-xs text-muted-foreground">{type.description}</div>
+                  <div className="text-xs text-muted-foreground whitespace-normal break-words">
+                    {type.description}
+                  </div>
                 </div>
               </SelectItem>
             ))}
@@ -94,9 +96,9 @@ export const DatasetConfiguration = ({
           <SelectContent>
             {Object.entries(ML_TASKS).map(([key, task]) => (
               <SelectItem key={key} value={key}>
-                <div className="flex items-center justify-between w-full">
-                  <span>{task.name}</span>
-                  <Badge variant="secondary" className="ml-2 text-xs">
+                <div className="flex items-center justify-between flex-wrap gap-1 w-full">
+                  <span className="truncate">{task.name}</span>
+                  <Badge variant="secondary" className="shrink-0 text-xs px-2 py-0.5">
                     {task.energyMultiplier}x
                   </Badge>
                 </div>
