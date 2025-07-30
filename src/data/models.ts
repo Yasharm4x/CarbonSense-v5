@@ -17,7 +17,6 @@ export const MODEL_CATEGORIES = {
       "yi-34b": { name: "Yi-34B", params: 34, company: "01.AI", energyMultiplier: 0.7 },
       "qwen-72b": { name: "Qwen 1.5 72B", params: 72, company: "Alibaba", energyMultiplier: 0.9 },
       "phi-3": { name: "Phi-3 Medium", params: 14, company: "Microsoft", energyMultiplier: 0.5 },
-      "zephyr-7b": { name: "Zephyr 7B", params: 7, company: "HuggingFace", energyMultiplier: 0.4 },
       "openchat-3.5": { name: "OpenChat 3.5", params: 7, company: "OpenChat", energyMultiplier: 0.4 }
     }
   },
