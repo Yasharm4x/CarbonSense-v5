@@ -7,7 +7,7 @@ import { componentTagger } from "lovable-tagger";
 const repoName = "CarbonSense"; // ✅ correct variable
 
 export default defineConfig(({ mode }) => ({
-  base: mode === "production" ? `/${repoName}/` : "/", // ✅ FIXED
+  base: mode === "production" ? `/${repoName}/` : "/", 
   server: {
     host: "::",
     port: 8080,
