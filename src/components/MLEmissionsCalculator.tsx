@@ -78,10 +78,10 @@ Calculated using: lovable.dev/ml-emissions-calculator`;
         <div className="text-center space-y-4 pt-8">
           <div className="inline-flex items-center gap-2 bg-eco-green/10 px-4 py-2 rounded-full">
             <Leaf className="h-5 w-5 text-eco-green" />
-            <span className="text-sm font-medium text-eco-green-dark">Carbon Impact Calculator</span>
+            <span className="text-sm font-medium text-eco-green-dark">Carbon Sense</span>
           </div>
           <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-eco-green to-eco-blue bg-clip-text text-transparent">
-            ML Emissions Calculator
+            Carbon Calculator
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Estimate the carbon footprint of machine learning models across various tasks and data types. 
