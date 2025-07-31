@@ -1,4 +1,4 @@
-// Model data organized by category
+// ==================== MODEL CATEGORIES ====================
 export const MODEL_CATEGORIES = {
   llm: {
     name: "Large Language Models",
@@ -73,6 +73,7 @@ export const MODEL_CATEGORIES = {
   }
 };
 
+// ==================== DATASET TYPES ====================
 export const DATASET_TYPES = {
   structured: { 
     name: "Structured Data", 
@@ -91,6 +92,7 @@ export const DATASET_TYPES = {
   }
 };
 
+// ==================== ML TASKS ====================
 export const ML_TASKS = {
   classification: { name: "Classification", energyMultiplier: 1.0 },
   regression: { name: "Regression", energyMultiplier: 0.9 },
@@ -106,10 +108,33 @@ export const ML_TASKS = {
   "recommendation": { name: "Recommendation Systems", energyMultiplier: 1.1 }
 };
 
+// ==================== REGIONS ====================
 export const REGION_DATA = {
   "us-west": { name: "US West Coast", carbonIntensity: 350, pue: 1.2 },
   "us-east": { name: "US East Coast", carbonIntensity: 500, pue: 1.3 },
   "eu-west": { name: "Western Europe", carbonIntensity: 300, pue: 1.15 },
   "asia-pacific": { name: "Asia Pacific", carbonIntensity: 700, pue: 1.4 },
   "global-avg": { name: "Global Average", carbonIntensity: 475, pue: 1.25 },
+};
+
+// ==================== HARDWARE TYPES ====================
+export const HARDWARE_TYPES = {
+  cpu: {
+    name: "CPU",
+    powerKW: 0.05,
+    utilization: 0.6,
+    description: "Standard Central Processing Unit, energy-efficient for smaller models or classic ML."
+  },
+  gpu: {
+    name: "GPU",
+    powerKW: 0.6,
+    utilization: 0.85,
+    description: "Graphics Processing Unit, ideal for LLMs and generative workloads."
+  },
+  tpu: {
+    name: "TPU v4",
+    powerKW: 0.4,
+    utilization: 0.9,
+    description: "Google's custom Tensor Processing Unit optimized for large-scale AI training."
+  }
 };
