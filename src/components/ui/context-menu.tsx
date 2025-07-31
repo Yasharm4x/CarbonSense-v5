@@ -161,6 +161,7 @@ const ContextMenuSeparator = React.forwardRef<
     {...props}
   />
 ))
+
 ContextMenuSeparator.displayName = ContextMenuPrimitive.Separator.displayName
 
 const ContextMenuShortcut = ({
@@ -196,3 +197,4 @@ export {
   ContextMenuSubTrigger,
   ContextMenuRadioGroup,
 }
+
