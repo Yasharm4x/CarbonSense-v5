@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Copy, Leaf, Zap, Globe, Calculator, Cpu } from "lucide-react";
@@ -122,23 +121,15 @@ Equivalent: ${contextualResult}`;
                       <label className="text-sm font-medium">Output Tokens</label>
                       <Badge variant="outline">{tokens.toLocaleString()}</Badge>
                     </div>
-                    <Slider
-                      value={[tokens]}
-                      onValueChange={(val) => setTokens(val[0])}
-                      max={100000}
+                    {/* replaced slider with number input */}
+                    <input
+                      type="number"
+                      className="w-full rounded-md border px-3 py-2 text-sm"
                       min={0}
                       step={10}
+                      value={tokens}
+                      onChange={(e) => setTokens(Number(e.target.value))}
                     />
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>0</span>
-                      <span>50,000</span>
-                      <span>2,50,000</span>
-                      <span>5,00,000</span>
-                      <span>10,00,000</span>
-                      <span>20,00,000</span>
-                      <span>35,00,000</span>
-                      <span>50,00,000</span>
-                    </div>
                   </div>
                 ) : (
                   <DatasetConfiguration
