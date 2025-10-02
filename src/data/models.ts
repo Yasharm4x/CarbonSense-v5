@@ -3,7 +3,7 @@ export const MODEL_CATEGORIES = {
   llm: {
     name: "Large Language Models",
     models: {
-      "gpt-5o": { name: "GPT-4o", params: 400, company: "OpenAI", energyMultiplier: 1.8 },
+      "gpt-5o": { name: "GPT-5o", params: 400, company: "OpenAI", energyMultiplier: 1.8 },
       "gpt-4o": { name: "GPT-4o", params: 175, company: "OpenAI", energyMultiplier: 1.0 },
       "claude-3": { name: "Claude 3 Opus", params: 175, company: "Anthropic", energyMultiplier: 1.0 },
       "llama-3-70b": { name: "LLaMA 3 70B", params: 70, company: "Meta", energyMultiplier: 0.9 },
