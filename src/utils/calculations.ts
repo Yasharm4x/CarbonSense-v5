@@ -92,6 +92,8 @@ export const calculateEmissions = ({
   return co2Grams;
 };
 
+// === Tree & Green Score Helpers ===
+
 const TREE_KG_PER_YEAR = 22; // one mature tree absorbs ~22 kg CO2 per year
 
 export const getContextualEquivalence = (co2Grams: number): string => {
@@ -130,4 +132,27 @@ export const getContextualEquivalence = (co2Grams: number): string => {
 
   // Combine both messages
   return `${baseMessage} • ≈${treesStr} need to be planted to offset this ${unit} emission (1 tree offsets ~${TREE_KG_PER_YEAR} kg/year).`;
+};
+
+// === New Green Score Helper ===
+
+// default threshold & penalty (can be overridden from UI)
+const DEFAULT_E0 = 0.001; // kWh per inference
+const DEFAULT_BETA = 0.5;
+
+export const calculateGreenScore = (
+  co2Grams: number,
+  performance: number, // 0–1
+  ci: number, // region.carbonIntensity
+  pue: number, // region.pue
+  e0: number = DEFAULT_E0,
+  beta: number = DEFAULT_BETA,
+  blend: 'multiplicative' | 'harmonic' = 'multiplicative'
+): number => {
+  // recover energy in kWh/inference
+  const energyKWh = co2Grams / 1000 / (ci * pue);
+  const gE = energyKWh <= e0 ? 1 : Math.exp(-beta * (energyKWh - e0));
+  return blend === 'harmonic'
+    ? 2 / (1 / performance + 1 / gE)
+    : performance * gE;
 };
