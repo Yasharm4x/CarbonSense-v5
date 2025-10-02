@@ -92,11 +92,39 @@ export const calculateEmissions = ({
   return co2Grams;
 };
 
+const TREE_KG_PER_YEAR = 22; // one mature tree absorbs ~22 kg CO2 per year
+
 export const getContextualEquivalence = (co2Grams: number): string => {
-  if (co2Grams < 1) return "< 1 second of breathing";
-  if (co2Grams < 5) return `${Math.round(co2Grams * 2)} seconds of phone charging`;
-  if (co2Grams < 50) return `${Math.round(co2Grams / 5)} minutes of phone charging`;
-  if (co2Grams < 500) return `${Math.round(co2Grams / 100)} meters driving a car`;
-  if (co2Grams < 5000) return `${Math.round(co2Grams / 1000)} km driving a car`;
-  return `${(co2Grams / 1000).toFixed(1)} kg CO₂ (significant impact)`;
+  // Base contextual equivalence
+  let baseMessage: string;
+
+  if (co2Grams < 1) {
+    baseMessage = "< 1 second of breathing";
+  } else if (co2Grams < 5) {
+    baseMessage = `${Math.round(co2Grams * 2)} seconds of phone charging`;
+  } else if (co2Grams < 50) {
+    baseMessage = `${Math.round(co2Grams / 5)} minutes of phone charging`;
+  } else if (co2Grams < 500) {
+    baseMessage = `${Math.round(co2Grams / 100)} meters driving a car`;
+  } else if (co2Grams < 5000) {
+    baseMessage = `${Math.round(co2Grams / 1000)} km driving a car`;
+  } else {
+    baseMessage = `${(co2Grams / 1000).toFixed(1)} kg CO₂ (significant impact)`;
+  }
+
+  // Trees needed
+  const rawTrees = co2Grams / 1000 / TREE_KG_PER_YEAR;
+  let treesStr: string;
+
+  if (rawTrees < 1) {
+    // show two decimals for fractional tree-years
+    treesStr = `${rawTrees.toFixed(2)} tree${rawTrees >= 1 ? "s" : ""}`;
+  } else {
+    // round up to next whole tree
+    const treesRounded = Math.ceil(rawTrees);
+    treesStr = `${treesRounded} tree${treesRounded > 1 ? "s" : ""}`;
+  }
+
+  // Combine both messages
+  return `${baseMessage} • ≈${treesStr} need to be planted to offset this CO₂ emission (1 tree offsets ~${TREE_KG_PER_YEAR} kg/year).`;
 };
