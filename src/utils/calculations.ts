@@ -8,9 +8,11 @@ import {
 
 interface ModelData {
   name: string;
-  params: number; // in billions, e.g. 175 for GPT-4
+  params: number; // in billions
   company: string;
   energyMultiplier: number;
+  thresholdKWh?: number; // new optional fields
+  beta?: number;
 }
 
 interface CalculationParams {
@@ -50,31 +52,21 @@ export const calculateEmissions = ({
 
   let baseEnergy = 0;
 
-  if (selectedCategory === 'llm') {
+  if (selectedCategory === "llm") {
     const energyPerTokenEstimate = 2.2e-8; // (kWh per billion param per token)
     const safeTokens = tokens ?? 0;
-
-    console.log("🔢 Tokens:", safeTokens);
-    console.log("📦 Model Params (B):", model.params);
-    console.log("⚡ Energy/Token Estimate:", energyPerTokenEstimate);
-    console.log("🧠 Hardware Factor:", hardwareFactor);
 
     baseEnergy = safeTokens * model.params * energyPerTokenEstimate * hardwareFactor;
   } else {
     const dataPoints = rows * columns;
     const energyPerDataPoint = model.params * 2e-9;
 
-    console.log("🔢 Data Points:", dataPoints);
-    console.log("📦 Model Params:", model.params);
-    console.log("⚡ Energy/Data Point:", energyPerDataPoint);
-    console.log("🧠 Hardware Factor:", hardwareFactor);
-
     baseEnergy = dataPoints * energyPerDataPoint * hardwareFactor;
   }
 
   let totalEnergy = baseEnergy * model.energyMultiplier;
 
-  if (selectedCategory !== 'llm') {
+  if (selectedCategory !== "llm") {
     if (selectedDatasetType && DATASET_TYPES[selectedDatasetType as keyof typeof DATASET_TYPES]) {
       totalEnergy *= DATASET_TYPES[selectedDatasetType as keyof typeof DATASET_TYPES].energyMultiplier;
     }
@@ -86,15 +78,12 @@ export const calculateEmissions = ({
 
   const co2Grams = totalEnergy * region.pue * region.carbonIntensity;
 
-  console.log("⚡ Total Energy (kWh):", totalEnergy.toFixed(6));
-  console.log("🌍 CO2 Grams:", co2Grams.toFixed(2));
-
   return co2Grams;
 };
 
 // === Tree & Green Score Helpers ===
 
-const TREE_KG_PER_YEAR = 22; // one mature tree absorbs ~22 kg CO2 per year
+const TREE_KG_PER_YEAR = 22; // one mature tree absorbs ~22 kg CO₂ per year
 
 export const getContextualEquivalence = (co2Grams: number): string => {
   // Decide whether to show grams or kilograms
@@ -115,7 +104,6 @@ export const getContextualEquivalence = (co2Grams: number): string => {
   } else if (co2Grams < 5000) {
     baseMessage = `${Math.round(co2Grams / 1000)} km driving a car`;
   } else {
-    // now uses kg display for high values
     baseMessage = `${displayValue} ${unit} (significant impact)`;
   }
 
@@ -130,13 +118,10 @@ export const getContextualEquivalence = (co2Grams: number): string => {
     treesStr = `${treesRounded} tree${treesRounded > 1 ? "s" : ""}`;
   }
 
-  // Combine both messages
   return `${baseMessage} • ≈${treesStr} need to be planted to offset this ${unit} emission (1 tree offsets ~${TREE_KG_PER_YEAR} kg/year).`;
 };
 
 // === New Green Score Helper ===
-
-// default threshold & penalty (can be overridden from UI)
 const DEFAULT_E0 = 0.001; // kWh per inference
 const DEFAULT_BETA = 0.5;
 
@@ -147,12 +132,12 @@ export const calculateGreenScore = (
   pue: number, // region.pue
   e0: number = DEFAULT_E0,
   beta: number = DEFAULT_BETA,
-  blend: 'multiplicative' | 'harmonic' = 'multiplicative'
+  blend: "multiplicative" | "harmonic" = "multiplicative"
 ): number => {
   // recover energy in kWh/inference
   const energyKWh = co2Grams / 1000 / (ci * pue);
   const gE = energyKWh <= e0 ? 1 : Math.exp(-beta * (energyKWh - e0));
-  return blend === 'harmonic'
+  return blend === "harmonic"
     ? 2 / (1 / performance + 1 / gE)
     : performance * gE;
 };
