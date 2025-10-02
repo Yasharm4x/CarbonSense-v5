@@ -8,7 +8,7 @@ import { Copy, Leaf, Zap, Globe, Calculator, Cpu } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ModelSelector } from "@/components/ModelSelector";
 import { DatasetConfiguration } from "@/components/DatasetConfiguration";
-import { calculateEmissions, getContextualEquivalence } from "@/utils/calculations";
+import { calculateEmissions, getContextualEquivalence, calculateGreenScore } from "@/utils/calculations";
 import {
   MODEL_CATEGORIES,
   REGION_DATA,
@@ -16,7 +16,6 @@ import {
 } from "@/data/models";
 
 export const MLEmissionsCalculator = () => {
-
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedModel, setSelectedModel] = useState<string>("");
   const [selectedDatasetType, setSelectedDatasetType] = useState<string>("");
@@ -26,6 +25,7 @@ export const MLEmissionsCalculator = () => {
   const [rows, setRows] = useState<number>(1000);
   const [columns, setColumns] = useState<number>(10);
   const [tokens, setTokens] = useState<number>(1000);
+  const [performance, setPerformance] = useState<number>(1); // new: normalized performance 0–1
 
   const { toast } = useToast();
 
@@ -42,13 +42,19 @@ export const MLEmissionsCalculator = () => {
   });
 
   const contextualResult = getContextualEquivalence(co2Result);
+
+  const region = REGION_DATA[selectedRegion as keyof typeof REGION_DATA];
+  const greenScore =
+    selectedRegion && co2Result > 0
+      ? calculateGreenScore(co2Result, performance, region.carbonIntensity, region.pue)
+      : 0;
+
   const isLLMCategory = selectedCategory === "llm";
   const isConfigurationComplete = selectedCategory && selectedModel && selectedRegion;
 
   const copyResult = () => {
     const categoryData = MODEL_CATEGORIES[selectedCategory as keyof typeof MODEL_CATEGORIES];
     const modelData = categoryData?.models[selectedModel as keyof typeof categoryData.models] as any;
-    const region = REGION_DATA[selectedRegion as keyof typeof REGION_DATA];
     const hardware = HARDWARE_TYPES[selectedHardware as keyof typeof HARDWARE_TYPES];
 
     const result = `ML Model Emissions: ${co2Result.toFixed(2)}g CO₂
@@ -59,7 +65,8 @@ ${selectedTask ? `Task: ${selectedTask}` : ""}
 ${selectedDatasetType ? `Data Type: ${selectedDatasetType}` : ""}
 Region: ${region?.name}
 Hardware: ${hardware?.name}
-Equivalent: ${contextualResult}`;
+Equivalent: ${contextualResult}
+Green Score: ${greenScore.toFixed(2)}`;
 
     navigator.clipboard.writeText(result);
     toast({
@@ -122,7 +129,6 @@ Equivalent: ${contextualResult}`;
                       <label className="text-sm font-medium">Output Tokens</label>
                       <Badge variant="outline">{tokens.toLocaleString()}</Badge>
                     </div>
-                    {/* replaced slider with number input */}
                     <Input
                       type="number"
                       min={0}
@@ -144,6 +150,22 @@ Equivalent: ${contextualResult}`;
                     onColumnsChange={setColumns}
                   />
                 )}
+
+                {/* Performance input */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium flex items-center gap-2">
+                    Model Performance (0–1)
+                  </label>
+                  <Input
+                    type="number"
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    value={performance}
+                    onChange={(e) => setPerformance(Number(e.target.value))}
+                    placeholder="Enter normalized performance score..."
+                  />
+                </div>
 
                 {/* Region */}
                 <div className="space-y-2">
@@ -219,7 +241,13 @@ Equivalent: ${contextualResult}`;
                       <div className="text-sm bg-eco-green-light/30 px-3 py-1 rounded-full">
                         ≈ {contextualResult}
                       </div>
+                      {greenScore > 0 && (
+                        <div className="text-sm bg-eco-green-light/30 px-3 py-1 rounded-full">
+                          Green Score: {greenScore.toFixed(2)} / 1.00
+                        </div>
+                      )}
                     </div>
+                    {/* existing details */}
                     <div className="border-t pt-4 text-sm text-muted-foreground space-y-1">
                       <div className="flex justify-between">
                         <span>Category:</span>
