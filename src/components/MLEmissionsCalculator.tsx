@@ -131,9 +131,13 @@ Equivalent: ${contextualResult}`;
                     />
                     <div className="flex justify-between text-xs text-muted-foreground">
                       <span>0</span>
-                      <span>25,000</span>
                       <span>50,000</span>
-                      <span>100,000</span>
+                      <span>2,50,000</span>
+                      <span>5,00,000</span>
+                      <span>10,00,000</span>
+                      <span>20,00,000</span>
+                      <span>35,00,000</span>
+                      <span>50,00,000</span>
                     </div>
                   </div>
                 ) : (
