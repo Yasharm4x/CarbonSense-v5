@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Copy, Leaf, Zap, Globe, Calculator, Cpu } from "lucide-react";
@@ -124,11 +125,11 @@ Equivalent: ${contextualResult}`;
                     {/* replaced slider with number input */}
                     <input
                       type="number"
-                      className="w-full rounded-md border px-3 py-2 text-sm"
                       min={0}
                       step={10}
                       value={tokens}
                       onChange={(e) => setTokens(Number(e.target.value))}
+                      placeholder="Enter tokens..."
                     />
                   </div>
                 ) : (
