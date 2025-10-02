@@ -123,7 +123,7 @@ Equivalent: ${contextualResult}`;
                       <Badge variant="outline">{tokens.toLocaleString()}</Badge>
                     </div>
                     {/* replaced slider with number input */}
-                    <input
+                    <Input
                       type="number"
                       min={0}
                       step={10}
