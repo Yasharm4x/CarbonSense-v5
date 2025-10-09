@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://yasharm4x.github.io/CarbonSense-v3",
+  "homepage": "https://yasharm4x.github.io/CarbonSense-v4",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
