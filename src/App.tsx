@@ -15,9 +15,23 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      {/* Global toasters */}
       <Toaster />
       <Sonner />
-      <ThemeToggle /> {/* ✅ Toggle button rendered globally */}
+
+      {/* ✅ Logo - top-left corner */}
+      <div className="absolute top-4 left-6 flex items-center gap-2 z-50">
+        <img
+          src="/TekFrameworks.png"
+          alt="Tekframeworks Logo"
+          className="h-8 w-auto object-contain"
+        />
+      </div>
+
+      {/* ✅ Theme toggle - top-right corner */}
+      <ThemeToggle />
+
+      {/* Main app routes */}
       <HashRouter>
         <Routes>
           <Route path="/" element={<Index />} />
@@ -25,9 +39,13 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
       </HashRouter>
+
+      {/* ✅ Footer */}
+      <footer className="text-center text-sm text-muted-foreground py-6 border-t border-border mt-8">
+        © 2025 <span className="font-semibold text-primary">Tekframeworks</span>. All Rights Reserved.
+      </footer>
     </TooltipProvider>
   </QueryClientProvider>
 );
 
 export default App;
-
