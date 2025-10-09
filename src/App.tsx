@@ -22,7 +22,7 @@ const App = () => (
       {/* ✅ Logo - top-left corner */}
       <div className="absolute top-4 left-6 flex items-center gap-2 z-50">
         <img
-          src="/TekFrameworks.png"
+          src={`${import.meta.env.BASE_URL}TekFrameworks.png`}
           alt="Tekframeworks Logo"
           className="h-8 w-auto object-contain"
         />
