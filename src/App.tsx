@@ -19,17 +19,20 @@ const App = () => (
       <Toaster />
       <Sonner />
 
-      {/* ✅ Logo - top-left corner */}
-      <div className="absolute top-4 left-6 flex items-center gap-2 z-50">
-        <img
-          src={`${import.meta.env.BASE_URL}TekFrameworks.png`}
-          alt="TekFrameworks Logo"
-          className="h-8 w-auto object-contain"
-        />
-      </div>
+      {/* ✅ Header bar containing logo and theme toggle */}
+      <div className="absolute top-4 left-6 right-6 flex items-center justify-between z-50">
+        {/* ✅ Enlarged logo */}
+        <div className="flex items-center gap-2">
+          <img
+            src={`${import.meta.env.BASE_URL}TekFrameworks.png`}
+            alt="TekFrameworks Logo"
+            className="h-10 w-auto object-contain" // ⬆️ slightly larger height
+          />
+        </div>
 
-      {/* ✅ Theme toggle - top-right corner */}
-      <ThemeToggle />
+        {/* ✅ Theme toggle aligned on same row */}
+        <ThemeToggle />
+      </div>
 
       {/* Main app routes */}
       <HashRouter>
