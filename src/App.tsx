@@ -8,7 +8,7 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import { ThemeToggle } from "@/components/ThemeToggle"; // ✅ Theme toggle component
+import { ThemeToggle } from "@/components/ThemeToggle"; // ✅ Add ThemeToggle
 
 const queryClient = new QueryClient();
 
@@ -19,39 +19,35 @@ const App = () => (
       <Toaster />
       <Sonner />
 
-      {/* ✅ Header with logo + theme toggle */}
-      <div className="absolute top-5 left-6 right-6 flex items-center justify-between z-50">
-        {/* ✅ Responsive enlarged logo */}
-        <div className="flex items-center gap-3">
+      {/* ✅ Header bar containing logo and theme toggle */}
+      <div className="absolute top-4 left-6 right-6 flex items-center justify-between z-50">
+        {/* ✅ Enlarged logo */}
+        <div className="flex items-center gap-2">
           <img
             src={`${import.meta.env.BASE_URL}TekFrameworks.png`}
             alt="TekFrameworks Logo"
-            className="h-12 md:h-14 w-auto object-contain transition-all duration-300"
+            className="h-12 w-auto object-contain" // ⬆️ slightly larger height
           />
         </div>
 
-        {/* ✅ Theme toggle aligned on same line */}
+        {/* ✅ Theme toggle aligned on same row */}
         <ThemeToggle />
       </div>
 
-      {/* ✅ Main routes */}
+      {/* Main app routes */}
       <HashRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* Add new routes above NotFound */}
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </HashRouter>
 
       {/* ✅ Footer */}
-      <footer className="text-center text-sm text-muted-foreground py-6 border-t border-border mt-10">
-        © 2025 <span className="font-semibold text-primary">TekFrameworks</span>. All Rights Reserved.
+      <footer className="text-center text-sm text-muted-foreground py-6 border-t border-border mt-8">
+        © 2025 <span className="font-semibold text-primary">Tekframeworks</span>. All Rights Reserved.
       </footer>
     </TooltipProvider>
-  </QueryClientProvider>
-);
-
-export default App;
   </QueryClientProvider>
 );
 
