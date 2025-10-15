@@ -26,7 +26,7 @@ const App = () => (
           <img
             src={`${import.meta.env.BASE_URL}TekFrameworks.png`}
             alt="TekFrameworks Logo"
-            className="h-12 w-auto object-contain" // ⬆️ slightly larger height
+            className="h-14 w-auto object-contain" // ⬆️ Increased logo size
           />
         </div>
 
